@@ -45,7 +45,7 @@
                     <h2 class="text-xl font-bold text-slate-800">醫生袍</h2>
                     <span class="text-xs text-slate-500 font-medium ml-auto">點擊增減或輸入</span>
                 </div>
-                <div class="grid grid-cols-1 gap-3" id="tops-container">
+                <div class="grid grid-cols-1 gap-3" id="gowns-container">
                     <!-- JS 動態生成 -->
                 </div>
             </div>
@@ -56,7 +56,7 @@
                     <span class="text-2xl">👕</span>
                     <h2 class="text-xl font-bold text-slate-800">上衣</h2>
                 </div>
-                <div class="grid grid-cols-1 gap-3" id="pants-container">
+                <div class="grid grid-cols-1 gap-3" id="tops-container">
                     <!-- JS 動態生成 -->
                 </div>
             </div>
@@ -67,7 +67,7 @@
                     <span class="text-2xl">👖</span>
                     <h2 class="text-xl font-bold text-slate-800">褲</h2>
                 </div>
-                <div class="grid grid-cols-1 gap-3" id="gowns-container">
+                <div class="grid grid-cols-1 gap-3" id="pants-container">
                     <!-- JS 動態生成 -->
                 </div>
             </div>
@@ -145,7 +145,7 @@
                     { id: "S", label: "細碼", base: 15, max: 18 },
                     { id: "M", label: "中碼", base: 15, max: 18 },
                     { id: "L", label: "大碼", base: 15, max: 18 },
-                    { id: "XL", label: "加大碼", base: 0, max: 0 } // 褲沒有加大碼，設為0
+                    { id: "XL", label: "加大碼", base: 0, max: 0 } // 上衣沒有加大碼，設為0
                 ]
             },
             pants: {
