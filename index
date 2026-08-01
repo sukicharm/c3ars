@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>C座3樓OLMH社康護理服務部醫生工作服補給計算器</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 隱藏 Chrome, Safari, Edge 和 Opera 的輸入框箭頭 */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        /* 隱藏 Firefox 的輸入框箭頭 */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <!-- 主容器 -->
+    <div class="flex-grow max-w-md w-full mx-auto px-4 py-6 flex flex-col gap-6">
+        
+        <!-- 頁首標題 -->
+        <header class="text-center py-2">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl mb-2 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-black text-slate-900">C座3樓OLMH社康護理服務部👨‍⚕👩‍⚕工作服補給計算器</h1>
+            <p class="text-sm font-semibold text-slate-600 mt-1">逢星期二、五快速盤點</p>
+        </header>
+
+        <!-- 數據輸入區 -->
+        <main class="flex flex-col gap-5">
+            
+            <!-- 醫生袍 Section -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-100">
+                    <span class="text-2xl">🥼</span>
+                    <h2 class="text-xl font-bold text-slate-800">醫生袍</h2>
+                    <span class="text-xs text-slate-500 font-medium ml-auto">點擊增減或輸入</span>
+                </div>
+                <div class="grid grid-cols-1 gap-3" id="tops-container">
+                    <!-- JS 動態生成 -->
+                </div>
+            </div>
+
+            <!-- 上衣 Section -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-100">
+                    <span class="text-2xl">👕</span>
+                    <h2 class="text-xl font-bold text-slate-800">上衣</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-3" id="pants-container">
+                    <!-- JS 動態生成 -->
+                </div>
+            </div>
+
+            <!-- 褲 Section -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-100">
+                    <span class="text-2xl">👖</span>
+                    <h2 class="text-xl font-bold text-slate-800">褲</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-3" id="gowns-container">
+                    <!-- JS 動態生成 -->
+                </div>
+            </div>
+
+            <!-- 污衣袋 Section -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-100">
+                    <span class="text-2xl">🧺</span>
+                    <h2 class="text-xl font-bold text-slate-800">污衣袋</h2>
+                </div>
+                <div class="grid grid-cols-1 gap-3" id="bags-container">
+                    <!-- JS 動態生成 -->
+                </div>
+            </div>
+
+            <!-- 計算與輸出結果區 -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col gap-3">
+                <div class="flex items-center justify-between mb-1 pb-2 border-b border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">📋</span>
+                        <h2 class="text-xl font-bold text-slate-800">補給結果預覽</h2>
+                    </div>
+                    <button onclick="resetAll()" class="text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors py-1.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100">
+                        🔄 清除重設
+                    </button>
+                </div>
+
+                <!-- 預覽文本框 -->
+                <textarea id="result-text" readonly class="w-full h-52 p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-base font-semibold text-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="輸入存量後將在此生成 WhatsApp 文字..."></textarea>
+
+                <!-- 操作按鈕群 -->
+                <div class="grid grid-cols-2 gap-2 mt-1">
+                    <button onclick="copyToClipboard()" class="flex items-center justify-center gap-2 bg-slate-900 text-white py-3.5 px-4 rounded-xl font-bold text-base hover:bg-slate-800 active:scale-[0.98] transition-all shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                        複製文字
+                    </button>
+                    <button onclick="shareToWhatsApp()" class="flex items-center justify-center gap-2 bg-[#25D366] text-white py-3.5 px-4 rounded-xl font-bold text-base hover:bg-[#20ba5a] active:scale-[0.98] transition-all shadow-sm">
+                        <!-- WhatsApp SVG Icon -->
+                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.705 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/>
+                        </svg>
+                        WhatsApp
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Toast 訊息提示元件 -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-semibold px-5 py-3.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2">
+        <span id="toast-icon">✨</span>
+        <span id="toast-msg">已複製到剪貼簿</span>
+    </div>
+
+    <script>
+        // 設定固定規格
+        const config = {
+             gowns: {
+                name: "醫生袍",
+                icon: "🥼",
+                sizes: [
+                    { id: "S", label: "細碼", base: 15, max: 18 },
+                    { id: "M", label: "中碼", base: 15, max: 18 },
+                    { id: "L", label: "大碼", base: 10, max: 12 },
+                    { id: "XL", label: "加大碼", base: 10, max: 12 }
+                ]
+            },
+             tops: {
+                name: "上衣",
+                icon: "👕",
+                sizes: [
+                    { id: "S", label: "細碼", base: 15, max: 18 },
+                    { id: "M", label: "中碼", base: 15, max: 18 },
+                    { id: "L", label: "大碼", base: 15, max: 18 },
+                    { id: "XL", label: "加大碼", base: 0, max: 0 } // 褲沒有加大碼，設為0
+                ]
+            },
+            pants: {
+                name: "褲",
+                icon: "👖",
+                sizes: [
+                    { id: "S", label: "細碼", base: 15, max: 18 },
+                    { id: "M", label: "中碼", base: 15, max: 18 },
+                    { id: "L", label: "大碼", base: 15, max: 18 },
+                    { id: "XL", label: "加大碼", base: 0, max: 0 } // 褲沒有加大碼，設為0
+                ]
+            },        
+            bags: {
+                name: "污衣袋",
+                icon: "🧺",
+                sizes: [
+                    { id: "STD", label: "標準", base: 10, max: 15 }
+                ]
+            }
+        };
+
+        // 儲存使用者輸入的存量狀態 (初始化為空)
+        const state = {
+            gowns: { S: "", M: "", L: "", XL: "" },
+            tops: { S: "", M: "", L: "", XL: "" },
+            pants: { S: "", M: "", L: "", XL: "" },
+            bags: { STD: "" }
+        };
+
+        // 初始化渲染介面
+        function init() {
+            renderSection("gowns", "gowns-container");
+            renderSection("tops", "tops-container");
+            renderSection("pants", "pants-container");
+            renderSection("bags", "bags-container");
+            calculateSupply();
+        }
+
+        // 動態生成 HTML 輸入元件
+        function renderSection(categoryKey, containerId) {
+            const container = document.getElementById(containerId);
+            const category = config[categoryKey];
+            container.innerHTML = "";
+
+            category.sizes.forEach(size => {
+                // 如果容量與基數皆為0（例如褲加大碼），則跳過或不顯示輸入框
+                if (size.base === 0 && size.max === 0) {
+                    return;
+                }
+
+                const row = document.createElement("div");
+                row.className = "flex items-center justify-between p-3 hover:bg-slate-50 rounded-xl transition-colors border border-slate-100";
+
+                row.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="text-xl font-black text-slate-900">${size.label}</span>
+                        <span class="text-xs text-slate-500 font-medium mt-0.5">基數: ${size.base} | 上限: ${size.max}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <!-- 減按鈕 -->
+                        <button onclick="adjustValue('${categoryKey}', '${size.id}', -1)" class="w-12 h-12 flex items-center justify-center bg-slate-100 active:bg-slate-200 text-slate-800 rounded-xl text-2xl font-bold select-none focus:outline-none transition-colors shadow-sm">
+                            －
+                        </button>
+                        <!-- 數值輸入框 -->
+                        <input 
+                            type="number" 
+                            id="input-${categoryKey}-${size.id}"
+                            value="${state[categoryKey][size.id]}"
+                            placeholder="輸入" 
+                            oninput="updateValue('${categoryKey}', '${size.id}', this.value)"
+                            class="w-16 h-12 text-center bg-slate-50 border border-slate-300 rounded-xl text-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all shadow-inner"
+                            min="0"
+                            max="${size.max}"
+                        />
+                        <!-- 加按鈕 -->
+                        <button onclick="adjustValue('${categoryKey}', '${size.id}', 1)" class="w-12 h-12 flex items-center justify-center bg-slate-100 active:bg-slate-200 text-slate-800 rounded-xl text-2xl font-bold select-none focus:outline-none transition-colors shadow-sm">
+                            ＋
+                        </button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // 調整數值（加/減按鈕）
+        function adjustValue(categoryKey, sizeId, delta) {
+            const inputEl = document.getElementById(`input-${categoryKey}-${sizeId}`);
+            let currentVal = parseInt(inputEl.value);
+            
+            if (isNaN(currentVal)) {
+                // 如果是空的，點擊「減」設為0，「加」依 delta 決定
+                currentVal = 0;
+            }
+
+            let newVal = currentVal + delta;
+            if (newVal < 0) newVal = 0;
+
+            // 限制不超過該尺寸的最大容量
+            const sizeConfig = config[categoryKey].sizes.find(s => s.id === sizeId);
+            if (newVal > sizeConfig.max) {
+                newVal = sizeConfig.max;
+                showToast("⚠️ 已達該項目之容量上限，不用補給", "💡");
+            }
+
+            inputEl.value = newVal;
+            state[categoryKey][sizeId] = newVal;
+            calculateSupply();
+        }
+
+        // 直接在輸入框修改數值時觸發
+        function updateValue(categoryKey, sizeId, value) {
+            const sizeConfig = config[categoryKey].sizes.find(s => s.id === sizeId);
+            let val = parseInt(value);
+
+            if (isNaN(val)) {
+                state[categoryKey][sizeId] = "";
+            } else {
+                if (val < 0) val = 0;
+                if (val > sizeConfig.max) {
+                    val = sizeConfig.max;
+                    showToast(`⚠️ 已達容量上限 (${sizeConfig.max}件)`, "💡");
+                }
+                state[categoryKey][sizeId] = val;
+                // 同步更新輸入框顯示
+                document.getElementById(`input-${categoryKey}-${sizeId}`).value = val;
+            }
+            calculateSupply();
+        }
+
+        // 計算補給演算法
+        function calculateSupply() {
+            let hasAnyInput = false;
+            let outputText = "🏥 *C座3樓OLMH社康護理服務部醫生工作服補給清單*\n";
+            
+            // 獲取當前日期
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            outputText += `📅 日期：${dateStr}\n\n`;
+
+            let overallSupplyCount = 0;
+
+            // 遍歷三大類
+            for (const [catKey, catData] of Object.entries(config)) {
+                let catLines = [];
+                
+                catData.sizes.forEach(size => {
+                    // 跳過無效規格
+                    if (size.base === 0 && size.max === 0) return;
+
+                    const stockRaw = state[catKey][size.id];
+                    if (stockRaw !== "") {
+                        hasAnyInput = true;
+                        const stock = parseInt(stockRaw);
+                        
+                        // 核心計算公式邏輯：
+                        // 1. 存量低於容量才需要補給
+                        // 2. 補給數量 = min(基數, 容量 - 存量)
+                        if (stock < size.max) {
+                            const supply = Math.min(size.base, size.max - stock);
+                            if (supply > 0) {
+                                catLines.push(`  ▫️ ${size.label}: 補給 *${supply}* 件 (當前存量: ${stock})`);
+                                overallSupplyCount++;
+                            }
+                        }
+                    }
+                });
+
+                if (catLines.length > 0) {
+                    outputText += `${catData.icon} *${catData.name}*\n${catLines.join('\n')}\n\n`;
+                } else {
+                    // 如果該大類有輸入但完全不需要補給，或是根本沒輸入
+                    // 為了簡潔，在 WhatsApp 訊息中若某大類完全不需要補給，直接顯示無須補給或省略。
+                    // 這裡選擇如果該大類有輸入記錄但皆無須補給，則顯示「已補滿」
+                    const catHasInput = catData.sizes.some(size => state[catKey][size.id] !== "");
+                    if (catHasInput) {
+                        outputText += `${catData.icon} *${catData.name}*\n  ✅ 庫存充足，無須補給\n\n`;
+                    }
+                }
+            }
+
+            if (!hasAnyInput) {
+                document.getElementById("result-text").value = "💡 請在上方輸入當日現貨存量，系統會自動生成補給報告。";
+                return;
+            }
+
+            if (overallSupplyCount === 0) {
+                outputText += `🎉 *今日所有工作服均無須補給！*`;
+            } else {
+                outputText += `---`;
+            }
+
+            document.getElementById("result-text").value = outputText;
+        }
+
+        // 清除重設所有數據
+        function resetAll() {
+            for (const catKey of Object.keys(state)) {
+                for (const sizeId of Object.keys(state[catKey])) {
+                    state[catKey][sizeId] = "";
+                    const el = document.getElementById(`input-${catKey}-${sizeId}`);
+                    if (el) el.value = "";
+                }
+            }
+            calculateSupply();
+            showToast("數據已成功清除重設", "🔄");
+        }
+
+        // 複製到剪貼簿 (使用傳統 document.execCommand 確保在 iframe 中亦能運作)
+        function copyToClipboard() {
+            const textArea = document.getElementById("result-text");
+            
+            // 如果還沒有任何輸入
+            const hasInput = Object.values(state).some(cat => Object.values(cat).some(val => val !== ""));
+            if (!hasInput) {
+                showToast("⚠️ 請先輸入存量數據", "❌");
+                return;
+            }
+
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // 針對手機端
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast("複製成功！可直接貼上到 WhatsApp", "✅");
+                } else {
+                    showToast("複製失敗，請手動全選複製", "❌");
+                }
+            } catch (err) {
+                showToast("複製出錯，請手動複製", "❌");
+            }
+            
+            // 取消選取狀態以免影響視覺
+            window.getSelection().removeAllRanges();
+        }
+
+        // 分享到 WhatsApp
+        function shareToWhatsApp() {
+            const hasInput = Object.values(state).some(cat => Object.values(cat).some(val => val !== ""));
+            if (!hasInput) {
+                showToast("⚠️ 請先輸入存量數據", "❌");
+                return;
+            }
+
+            const text = document.getElementById("result-text").value;
+            const encodedText = encodeURIComponent(text);
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedText}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // 顯示自訂 Toast 提示
+        function showToast(message, icon = "✨") {
+            const toast = document.getElementById("toast");
+            const toastIcon = document.getElementById("toast-icon");
+            const toastMsg = document.getElementById("toast-msg");
+
+            toastIcon.innerText = icon;
+            toastMsg.innerText = message;
+
+            // 顯示
+            toast.classList.remove("opacity-0", "pointer-events-none");
+            toast.classList.add("opacity-100");
+
+            // 4秒後自動隱藏
+            setTimeout(() => {
+                toast.classList.remove("opacity-100");
+                toast.classList.add("opacity-0", "pointer-events-none");
+            }, 4000);
+        }
+
+        // 頁面載入完成後執行
+        window.onload = function() {
+            init();
+        };
+    </script>
+</body>
+</html>
