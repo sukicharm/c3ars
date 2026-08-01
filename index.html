@@ -77,7 +77,6 @@
                 <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-100">
                     <span class="text-2xl">💧</span>
                     <h2 class="text-xl font-bold text-slate-800">扁拖布</h2>
-                    <span class="text-xs text-slate-500 font-medium ml-auto">點擊增減或輸入</span>
                 </div>
                 <div class="grid grid-cols-1 gap-3" id="flatmop-container">
                     <!-- JS 動態生成 -->
@@ -157,7 +156,7 @@
                     { id: "S", label: "細碼", base: 15, max: 18 },
                     { id: "M", label: "中碼", base: 15, max: 18 },
                     { id: "L", label: "大碼", base: 15, max: 18 },
-                    { id: "XL", label: "加大碼", base: 0, max: 0 } // 上衣沒有加大碼，設為0
+                    { id: "XL", label: "加大碼", base: 0, max: 0 }
                 ]
             },
             pants: {
@@ -167,7 +166,7 @@
                     { id: "S", label: "細碼", base: 15, max: 18 },
                     { id: "M", label: "中碼", base: 15, max: 18 },
                     { id: "L", label: "大碼", base: 15, max: 18 },
-                    { id: "XL", label: "加大碼", base: 0, max: 0 } // 褲沒有加大碼，設為0
+                    { id: "XL", label: "加大碼", base: 0, max: 0 }
                 ]
             },        
             flatmop: {
@@ -176,8 +175,8 @@
                 sizes: [
                     { id: "B", label: "藍色", base: 30, max: 30 },
                     { id: "R", label: "紅色", base: 15, max: 15 },
-                    { id: "G", label: "綠色", base: 0, max: 0 },// 沒有綠色，設為0
-                    { id: "Y", label: "黃色", base: 0, max: 0 } // 沒有黃色，設為0
+                    { id: "G", label: "綠色", base: 0, max: 0 },
+                    { id: "Y", label: "黃色", base: 0, max: 0 }
                 ]
             },
             bags: {
@@ -189,36 +188,30 @@
             }
         };
 
-        // 儲存使用者輸入的存量狀態 (初始化為空)
         const state = {
             gowns: { S: "", M: "", L: "", XL: "" },
             tops: { S: "", M: "", L: "", XL: "" },
             pants: { S: "", M: "", L: "", XL: "" },
-            flatmop: { B: "", R: "", G: "", Y: "" }
+            flatmop: { B: "", R: "", G: "", Y: "" },
             bags: { STD: "" }
         };
 
-        // 初始化渲染介面
         function init() {
             renderSection("gowns", "gowns-container");
             renderSection("tops", "tops-container");
             renderSection("pants", "pants-container");
-            renderSection("flatmop", "flatmop-container");            
+            renderSection("flatmop", "flatmop-container");
             renderSection("bags", "bags-container");
             calculateSupply();
         }
 
-        // 動態生成 HTML 輸入元件
         function renderSection(categoryKey, containerId) {
             const container = document.getElementById(containerId);
             const category = config[categoryKey];
             container.innerHTML = "";
 
             category.sizes.forEach(size => {
-                // 如果容量與基數皆為0（例如褲加大碼），則跳過或不顯示輸入框
-                if (size.base === 0 && size.max === 0) {
-                    return;
-                }
+                if (size.base === 0 && size.max === 0) return;
 
                 const row = document.createElement("div");
                 row.className = "flex items-center justify-between p-3 hover:bg-slate-50 rounded-xl transition-colors border border-slate-100";
@@ -229,11 +222,9 @@
                         <span class="text-xs text-slate-500 font-medium mt-0.5">基數: ${size.base} | 上限: ${size.max}</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <!-- 減按鈕 -->
                         <button onclick="adjustValue('${categoryKey}', '${size.id}', -1)" class="w-12 h-12 flex items-center justify-center bg-slate-100 active:bg-slate-200 text-slate-800 rounded-xl text-2xl font-bold select-none focus:outline-none transition-colors shadow-sm">
                             －
                         </button>
-                        <!-- 數值輸入框 -->
                         <input 
                             type="number" 
                             id="input-${categoryKey}-${size.id}"
@@ -244,7 +235,6 @@
                             min="0"
                             max="${size.max}"
                         />
-                        <!-- 加按鈕 -->
                         <button onclick="adjustValue('${categoryKey}', '${size.id}', 1)" class="w-12 h-12 flex items-center justify-center bg-slate-100 active:bg-slate-200 text-slate-800 rounded-xl text-2xl font-bold select-none focus:outline-none transition-colors shadow-sm">
                             ＋
                         </button>
@@ -254,20 +244,17 @@
             });
         }
 
-        // 調整數值（加/減按鈕）
         function adjustValue(categoryKey, sizeId, delta) {
             const inputEl = document.getElementById(`input-${categoryKey}-${sizeId}`);
             let currentVal = parseInt(inputEl.value);
             
             if (isNaN(currentVal)) {
-                // 如果是空的，點擊「減」設為0，「加」依 delta 決定
                 currentVal = 0;
             }
 
             let newVal = currentVal + delta;
             if (newVal < 0) newVal = 0;
 
-            // 限制不超過該項目的最大容量
             const sizeConfig = config[categoryKey].sizes.find(s => s.id === sizeId);
             if (newVal > sizeConfig.max) {
                 newVal = sizeConfig.max;
@@ -279,7 +266,6 @@
             calculateSupply();
         }
 
-        // 直接在輸入框修改數值時觸發
         function updateValue(categoryKey, sizeId, value) {
             const sizeConfig = config[categoryKey].sizes.find(s => s.id === sizeId);
             let val = parseInt(value);
@@ -293,30 +279,25 @@
                     showToast(`⚠️ 已達容量上限 (${sizeConfig.max}件)，不用補給`, "💡");
                 }
                 state[categoryKey][sizeId] = val;
-                // 同步更新輸入框顯示
                 document.getElementById(`input-${categoryKey}-${sizeId}`).value = val;
             }
             calculateSupply();
         }
 
-        // 計算補給演算法
         function calculateSupply() {
             let hasAnyInput = false;
             let outputText = "🏥 *C座3樓OLMH社康護理服務部醫生工作服補給清單*\n";
             
-            // 獲取當前日期
             const today = new Date();
             const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
             outputText += `📅 日期：${dateStr}\n\n`;
 
             let overallSupplyCount = 0;
 
-            // 遍歷三大類
             for (const [catKey, catData] of Object.entries(config)) {
                 let catLines = [];
                 
                 catData.sizes.forEach(size => {
-                    // 跳過無效規格
                     if (size.base === 0 && size.max === 0) return;
 
                     const stockRaw = state[catKey][size.id];
@@ -324,9 +305,6 @@
                         hasAnyInput = true;
                         const stock = parseInt(stockRaw);
                         
-                        // 核心計算公式邏輯：
-                        // 1. 存量低於容量才需要補給
-                        // 2. 補給數量 = min(基數, 容量 - 存量)
                         if (stock < size.max) {
                             const supply = Math.min(size.base, size.max - stock);
                             if (supply > 0) {
@@ -340,9 +318,6 @@
                 if (catLines.length > 0) {
                     outputText += `${catData.icon} *${catData.name}*\n${catLines.join('\n')}\n\n`;
                 } else {
-                    // 如果該大類有輸入但完全不需要補給，或是根本沒輸入
-                    // 為了簡潔，在 WhatsApp 訊息中若某大類完全不需要補給，直接顯示無須補給或省略。
-                    // 這裡選擇如果該大類有輸入記錄但皆無須補給，則顯示「已補滿」
                     const catHasInput = catData.sizes.some(size => state[catKey][size.id] !== "");
                     if (catHasInput) {
                         outputText += `${catData.icon} *${catData.name}*\n  ✅ 庫存充足，無須補給\n\n`;
@@ -356,7 +331,7 @@
             }
 
             if (overallSupplyCount === 0) {
-                outputText += `🎉 *今日所有工作服均無須補給！*`;
+                outputText += `🎉 *今日所有項目均無須補給！*`;
             } else {
                 outputText += `---`;
             }
@@ -364,7 +339,6 @@
             document.getElementById("result-text").value = outputText;
         }
 
-        // 清除重設所有數據
         function resetAll() {
             for (const catKey of Object.keys(state)) {
                 for (const sizeId of Object.keys(state[catKey])) {
@@ -377,11 +351,8 @@
             showToast("數據已成功清除重設", "🔄");
         }
 
-        // 複製到剪貼簿 (使用傳統 document.execCommand 確保在 iframe 中亦能運作)
         function copyToClipboard() {
             const textArea = document.getElementById("result-text");
-            
-            // 如果還沒有任何輸入
             const hasInput = Object.values(state).some(cat => Object.values(cat).some(val => val !== ""));
             if (!hasInput) {
                 showToast("⚠️ 請先輸入存量數據", "❌");
@@ -389,7 +360,7 @@
             }
 
             textArea.select();
-            textArea.setSelectionRange(0, 99999); // 針對手機端
+            textArea.setSelectionRange(0, 99999);
 
             try {
                 const successful = document.execCommand('copy');
@@ -402,11 +373,9 @@
                 showToast("複製出錯，請手動複製", "❌");
             }
             
-            // 取消選取狀態以免影響視覺
             window.getSelection().removeAllRanges();
         }
 
-        // 分享到 WhatsApp
         function shareToWhatsApp() {
             const hasInput = Object.values(state).some(cat => Object.values(cat).some(val => val !== ""));
             if (!hasInput) {
@@ -420,7 +389,6 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        // 顯示自訂 Toast 提示
         function showToast(message, icon = "✨") {
             const toast = document.getElementById("toast");
             const toastIcon = document.getElementById("toast-icon");
@@ -429,18 +397,15 @@
             toastIcon.innerText = icon;
             toastMsg.innerText = message;
 
-            // 顯示
             toast.classList.remove("opacity-0", "pointer-events-none");
             toast.classList.add("opacity-100");
 
-            // 4秒後自動隱藏
             setTimeout(() => {
                 toast.classList.remove("opacity-100");
                 toast.classList.add("opacity-0", "pointer-events-none");
             }, 4000);
         }
 
-        // 頁面載入完成後執行
         window.onload = function() {
             init();
         };
