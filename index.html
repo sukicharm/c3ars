@@ -171,7 +171,7 @@
                 ]
             },        
             flatmop: {
-                name: 扁拖布",
+                name: "扁拖布",
                 icon: "💧",
                 sizes: [
                     { id: "B", label: "藍色", base: 30, max: 30 },
@@ -194,6 +194,7 @@
             gowns: { S: "", M: "", L: "", XL: "" },
             tops: { S: "", M: "", L: "", XL: "" },
             pants: { S: "", M: "", L: "", XL: "" },
+            flatmop: { B: "", R: "", G: "", Y: "" }
             bags: { STD: "" }
         };
 
@@ -202,7 +203,7 @@
             renderSection("gowns", "gowns-container");
             renderSection("tops", "tops-container");
             renderSection("pants", "pants-container");
-            renderSection("pants", "flatmop-container");            
+            renderSection("flatmop", "flatmop-container");            
             renderSection("bags", "bags-container");
             calculateSupply();
         }
