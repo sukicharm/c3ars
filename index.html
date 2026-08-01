@@ -72,6 +72,18 @@
                 </div>
             </div>
 
+            <!-- 扁拖布 Section -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-100">
+                    <span class="text-2xl">💧</span>
+                    <h2 class="text-xl font-bold text-slate-800">扁拖布</h2>
+                    <span class="text-xs text-slate-500 font-medium ml-auto">點擊增減或輸入</span>
+                </div>
+                <div class="grid grid-cols-1 gap-3" id="flatmop-container">
+                    <!-- JS 動態生成 -->
+                </div>
+            </div>
+            
             <!-- 污衣袋 Section -->
             <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
                 <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-100">
@@ -158,6 +170,16 @@
                     { id: "XL", label: "加大碼", base: 0, max: 0 } // 褲沒有加大碼，設為0
                 ]
             },        
+            flatmop: {
+                name: 扁拖布",
+                icon: "💧",
+                sizes: [
+                    { id: "B", label: "藍色", base: 30, max: 30 },
+                    { id: "R", label: "紅色", base: 15, max: 15 },
+                    { id: "G", label: "綠色", base: 0, max: 0 },// 沒有綠色，設為0
+                    { id: "Y", label: "黃色", base: 0, max: 0 } // 沒有黃色，設為0
+                ]
+            },
             bags: {
                 name: "污衣袋",
                 icon: "🧺",
@@ -180,6 +202,7 @@
             renderSection("gowns", "gowns-container");
             renderSection("tops", "tops-container");
             renderSection("pants", "pants-container");
+            renderSection("pants", "flatmop-container");            
             renderSection("bags", "bags-container");
             calculateSupply();
         }
@@ -243,7 +266,7 @@
             let newVal = currentVal + delta;
             if (newVal < 0) newVal = 0;
 
-            // 限制不超過該尺寸的最大容量
+            // 限制不超過該項目的最大容量
             const sizeConfig = config[categoryKey].sizes.find(s => s.id === sizeId);
             if (newVal > sizeConfig.max) {
                 newVal = sizeConfig.max;
@@ -266,7 +289,7 @@
                 if (val < 0) val = 0;
                 if (val > sizeConfig.max) {
                     val = sizeConfig.max;
-                    showToast(`⚠️ 已達容量上限 (${sizeConfig.max}件)`, "💡");
+                    showToast(`⚠️ 已達容量上限 (${sizeConfig.max}件)，不用補給`, "💡");
                 }
                 state[categoryKey][sizeId] = val;
                 // 同步更新輸入框顯示
