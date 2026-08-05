@@ -143,8 +143,8 @@
                 name: "醫生袍",
                 icon: "🥼",
                 sizes: [
-                    { id: "S", label: "細碼", base: 15, max: 18 },
-                    { id: "M", label: "中碼", base: 15, max: 18 },
+                    { id: "S", label: "細碼", base: 6, max: 8 },
+                    { id: "M", label: "中碼", base: 15, max: 17 },
                     { id: "L", label: "大碼", base: 10, max: 12 },
                     { id: "XL", label: "加大碼", base: 10, max: 12 }
                 ]
@@ -153,9 +153,9 @@
                 name: "上衣",
                 icon: "👕",
                 sizes: [
-                    { id: "S", label: "細碼", base: 15, max: 18 },
-                    { id: "M", label: "中碼", base: 15, max: 18 },
-                    { id: "L", label: "大碼", base: 15, max: 18 },
+                    { id: "S", label: "細碼", base: 15, max: 17 },
+                    { id: "M", label: "中碼", base: 15, max: 17 },
+                    { id: "L", label: "大碼", base: 15, max: 17 },
                     { id: "XL", label: "加大碼", base: 0, max: 0 }
                 ]
             },
@@ -163,9 +163,9 @@
                 name: "褲",
                 icon: "👖",
                 sizes: [
-                    { id: "S", label: "細碼", base: 15, max: 18 },
-                    { id: "M", label: "中碼", base: 15, max: 18 },
-                    { id: "L", label: "大碼", base: 15, max: 18 },
+                    { id: "S", label: "細碼", base: 15, max: 17 },
+                    { id: "M", label: "中碼", base: 15, max: 17 },
+                    { id: "L", label: "大碼", base: 15, max: 17 },
                     { id: "XL", label: "加大碼", base: 0, max: 0 }
                 ]
             },        
@@ -183,7 +183,7 @@
                 name: "污衣袋",
                 icon: "🧺",
                 sizes: [
-                    { id: "STD", label: "標準", base: 10, max: 15 }
+                    { id: "STD", label: "標準", base: 10, max: 12 }
                 ]
             }
         };
@@ -308,7 +308,7 @@
                         if (stock < size.max) {
                             const supply = Math.min(size.base, size.max - stock);
                             if (supply > 0) {
-                                catLines.push(`  ▫️ ${size.label}: 補給 *${supply}* 件 (當前存量: ${stock})`);
+                                catLines.push(`  ▫️ ${size.label}: 上限補給 *${supply}* 件 (當前存量: ${stock})`);
                                 overallSupplyCount++;
                             }
                         }
@@ -326,7 +326,7 @@
             }
 
             if (!hasAnyInput) {
-                document.getElementById("result-text").value = "💡 請在上方輸入當日現貨存量，系統會自動生成補給報告。";
+                document.getElementById("result-text").value = "💡 請在上方輸入現貨存量，系統會自動計算補給量。";
                 return;
             }
 
